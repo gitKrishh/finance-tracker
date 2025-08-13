@@ -2,33 +2,32 @@ import { Router } from "express";
 import { 
     loginUser, 
     logoutUser, 
-    registerUser 
+    registerUser,
+    updateAccountDetails,
+    changeCurrentPassword,
 } from "../controllers/user.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
-// Create a new router instance
 const router = Router();
 
 // --- Public Routes ---
-// These routes do not require authentication.
-
-// Route for user registration
-// POST /api/v1/users/register
 router.route("/register").post(registerUser);
-
-// Route for user login
-// POST /api/v1/users/login
 router.route("/login").post(loginUser);
 
-
 // --- Secured Routes ---
-// These routes require the user to be logged in (i.e., have a valid access token).
-
-// Route for user logout
-// POST /api/v1/users/logout
-// The 'auth' middleware is applied here to ensure only an authenticated user can log out.
 router.route("/logout").post(auth, logoutUser);
 
+// New route to update account details
+router.route("/update-account").patch(auth, updateAccountDetails);
 
-// Export the router to be used in app.js
+// New route to change password
+router.route("/change-password").post(auth, changeCurrentPassword);
+
+// Note: The avatar route is defined but the controller isn't fully implemented yet.
+// You can add the updateUserAvatar controller later.
+router.route("/avatar").patch(auth, upload.single("avatar"), (req, res) => {
+    res.status(200).json(new ApiResponse(200, {}, "Avatar update endpoint placeholder"));
+});
+
 export default router;
