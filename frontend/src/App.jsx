@@ -1,13 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Landing from './pages/Landing';
+import Landing from './pages/Landing.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
 
 // --- Page Imports ---
 // You will create these page components next.
 // For now, we can use placeholder components.
-const Login = () => <h2>Login Page</h2>;
-const Register = () => <h2>Register Page</h2>;
+
+
 const Dashboard = () => <h2>Dashboard</h2>;
 const Transactions = () => <h2>Transactions Page</h2>;
 const Reports = () => <h2>Reports Page</h2>;
