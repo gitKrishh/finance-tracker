@@ -9,6 +9,7 @@ import {
     deleteTransaction,
     getTransactionStats,
     getCategoryBreakdown,
+    getReportData, // Import the new controller
 } from "../controllers/transaction.controller.js";
 
 const router = Router();
@@ -16,21 +17,19 @@ const router = Router();
 // Apply the 'auth' middleware to all routes in this file.
 router.use(auth);
 
+// --- New Reports Route ---
+// GET /api/v1/transactions/reports?startDate=...&endDate=...
+router.route("/reports").get(getReportData);
+
 // --- Dashboard Routes ---
 router.route("/stats").get(getTransactionStats);
 router.route("/summary/categories").get(getCategoryBreakdown);
 
 // --- Transaction CRUD Routes ---
-
-// Route to create a new transaction (with optional receipt) and get all transactions
 router.route("/")
-    .post(
-        upload.single("receipt"), // Multer middleware to process one file from the 'receipt' field
-        createTransaction
-    )
+    .post(upload.single("receipt"), createTransaction)
     .get(getUserTransactions);
 
-// Route to get, update, and delete a specific transaction by its ID
 router.route("/:id")
     .get(getTransactionById)
     .patch(updateTransaction)

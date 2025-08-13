@@ -10,8 +10,9 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions'; // Import the new page
 import Settings from './pages/Setting';
+import Reports from './pages/Reports';
 // Placeholders for future pages
-const Reports = () => <h2>Reports Page</h2>;
+
 
 
 const ProtectedRoute = ({ children }) => {

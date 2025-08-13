@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-// Import necessary icons from lucide-react
-import { LayoutDashboard, LogOut, Settings, User, ArrowRightLeft, Menu, X } from 'lucide-react';
+// Import necessary icons from lucide-react, including one for reports
+import { LayoutDashboard, LogOut, Settings, User, ArrowRightLeft, Menu, X, BarChart3 } from 'lucide-react';
 
-// A simple, clean SVG logo for a professional look
+// Logo component (no changes needed)
 const Logo = () => (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="32" height="32" rx="8" fill="#3B82F6"/>
@@ -24,7 +24,7 @@ const Navbar = () => {
         navigate('/login');
     };
 
-    // A reusable NavItem component for consistent styling
+    // Reusable NavItem component (no changes needed)
     const NavItem = ({ to, icon, children }) => (
         <NavLink
             to={to}
@@ -35,7 +35,7 @@ const Navbar = () => {
                         : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`
             }
-            onClick={() => setMobileMenuOpen(false)} // Close mobile menu on navigation
+            onClick={() => setMobileMenuOpen(false)}
         >
             {icon}
             <span>{children}</span>
@@ -55,6 +55,8 @@ const Navbar = () => {
                         <nav className="hidden md:flex items-center space-x-4">
                             <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />}>Dashboard</NavItem>
                             <NavItem to="/transactions" icon={<ArrowRightLeft size={20} />}>Transactions</NavItem>
+                            {/* --- THIS IS THE NEW LINK --- */}
+                            <NavItem to="/reports" icon={<BarChart3 size={20} />}>Reports</NavItem>
                         </nav>
                     </div>
 
@@ -104,6 +106,8 @@ const Navbar = () => {
                     <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />}>Dashboard</NavItem>
                         <NavItem to="/transactions" icon={<ArrowRightLeft size={20} />}>Transactions</NavItem>
+                        {/* --- THIS IS THE NEW LINK FOR MOBILE --- */}
+                        <NavItem to="/reports" icon={<BarChart3 size={20} />}>Reports</NavItem>
                     </nav>
                     <div className="pt-4 pb-3 border-t border-gray-200">
                         <div className="flex items-center px-5">
