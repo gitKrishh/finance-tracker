@@ -3,7 +3,11 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 
-// A reusable summary card component
+// Import the new chart components
+import PieChartComponent from '../components/Charts/PieChart';
+import BarChartComponent from '../components/Charts/BarChart';
+
+// Reusable summary card component (no changes needed here)
 const CardSummary = ({ title, value, icon, color }) => (
     <div className="bg-white p-6 rounded-xl shadow-md flex items-center space-x-4">
         <div className={`p-3 rounded-full ${color}`}>
@@ -22,7 +26,7 @@ const Dashboard = () => {
     const [stats, setStats] = useState({ totalIncome: 0, totalExpense: 0, balance: 0 });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const { token } = useAuth(); // Get token for authenticated requests
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -46,11 +50,11 @@ const Dashboard = () => {
     }, [token]);
 
     if (loading) {
-        return <div className="text-center">Loading dashboard...</div>;
+        return <div className="text-center p-10">Loading dashboard...</div>;
     }
 
     if (error) {
-        return <div className="text-center text-red-500">{error}</div>;
+        return <div className="text-center text-red-500 p-10">{error}</div>;
     }
 
     return (
@@ -79,17 +83,15 @@ const Dashboard = () => {
                 />
             </div>
 
-            {/* Charts Section - Placeholders for now */}
+            {/* Charts Section */}
             <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold mb-4">Expense Breakdown</h2>
-                    {/* You will replace this div with your PieChart component */}
-                    <div className="h-64 flex items-center justify-center text-gray-400">Pie Chart Placeholder</div>
+                    <PieChartComponent />
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-bold mb-4">Recent Activity</h2>
-                    {/* You will replace this div with your BarChart or a list of recent transactions */}
-                    <div className="h-64 flex items-center justify-center text-gray-400">Activity Chart Placeholder</div>
+                    <BarChartComponent />
                 </div>
             </div>
         </div>
