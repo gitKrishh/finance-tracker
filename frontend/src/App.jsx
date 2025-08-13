@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // --- Page & Layout Imports ---
-import MainLayout from './components/MainLayout'; // Import the layout
+import MainLayout from './components/MainLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions'; // Import the new page
 // Placeholders for future pages
-const Transactions = () => <h2>Transactions Page</h2>;
 const Reports = () => <h2>Reports Page</h2>;
 const Settings = () => <h2>Settings Page</h2>;
 
