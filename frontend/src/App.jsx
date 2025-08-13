@@ -9,9 +9,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions'; // Import the new page
+import Settings from './pages/Setting';
 // Placeholders for future pages
 const Reports = () => <h2>Reports Page</h2>;
-const Settings = () => <h2>Settings Page</h2>;
+
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
