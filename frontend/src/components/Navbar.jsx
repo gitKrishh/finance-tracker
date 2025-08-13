@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-// Import necessary icons from lucide-react, including one for reports
+// Import necessary icons from lucide-react
 import { LayoutDashboard, LogOut, Settings, User, ArrowRightLeft, Menu, X, BarChart3 } from 'lucide-react';
 
-// Logo component (no changes needed)
+// --- THIS IS THE NEW LOGO ---
+// A stylized 'S' to represent a track or path, fitting the name "SpendTrack".
 const Logo = () => (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="32" height="32" rx="8" fill="#3B82F6"/>
-        <path d="M10 10H16V13H13V16H16V19H13V22H10V10Z" fill="white"/>
-        <path d="M19 10H22V22H19V10Z" fill="white"/>
+        <path d="M12 22C12 24.2091 13.7909 26 16 26C18.2091 26 20 24.2091 20 22C20 19.7909 18.2091 18 16 18H12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M20 10C20 7.79086 18.2091 6 16 6C13.7909 6 12 7.79086 12 10C12 12.2091 13.7909 14 16 14H20" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 );
+
 
 const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,7 +26,7 @@ const Navbar = () => {
         navigate('/login');
     };
 
-    // Reusable NavItem component (no changes needed)
+    // Reusable NavItem component for consistent styling
     const NavItem = ({ to, icon, children }) => (
         <NavLink
             to={to}
@@ -35,7 +37,7 @@ const Navbar = () => {
                         : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`
             }
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => setMobileMenuOpen(false)} // Close mobile menu on navigation
         >
             {icon}
             <span>{children}</span>
@@ -50,12 +52,11 @@ const Navbar = () => {
                     <div className="flex items-center space-x-8">
                         <NavLink to="/dashboard" className="flex items-center space-x-2">
                             <Logo />
-                            <span className="text-xl font-bold text-gray-800 hidden sm:block">FinanceTracker</span>
+                            <span className="text-xl font-bold text-gray-800 hidden sm:block">SpendTrack</span>
                         </NavLink>
                         <nav className="hidden md:flex items-center space-x-4">
                             <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />}>Dashboard</NavItem>
                             <NavItem to="/transactions" icon={<ArrowRightLeft size={20} />}>Transactions</NavItem>
-                            {/* --- THIS IS THE NEW LINK --- */}
                             <NavItem to="/reports" icon={<BarChart3 size={20} />}>Reports</NavItem>
                         </nav>
                     </div>
@@ -106,7 +107,6 @@ const Navbar = () => {
                     <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />}>Dashboard</NavItem>
                         <NavItem to="/transactions" icon={<ArrowRightLeft size={20} />}>Transactions</NavItem>
-                        {/* --- THIS IS THE NEW LINK FOR MOBILE --- */}
                         <NavItem to="/reports" icon={<BarChart3 size={20} />}>Reports</NavItem>
                     </nav>
                     <div className="pt-4 pb-3 border-t border-gray-200">

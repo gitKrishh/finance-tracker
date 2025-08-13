@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import TransactionForm from '../components/TransactionForm'; // Import the form
+import TransactionForm from '../components/TransactionForm';
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -11,26 +12,49 @@ const Transactions = () => {
     const [error, setError] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [transactionToEdit, setTransactionToEdit] = useState(null);
+    const [initialType, setInitialType] = useState('expense');
     const { token } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    const fetchTransactions = async () => {
+    useEffect(() => {
+        if (location.state?.openModal) {
+            setInitialType(location.state.type || 'expense');
+            setIsModalOpen(true);
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, []);
+
+    const fetchTransactions = useCallback(async () => {
         setLoading(true);
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_API_URL}/transactions`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
             );
-            setTransactions(response.data.data);
+            
+            // --- THE DEFINITIVE SORTING FIX ---
+            const sorted = response.data.data.sort((a, b) => {
+                const dateComparison = new Date(b.date) - new Date(a.date);
+                // If the main dates are different, sort by them.
+                if (dateComparison !== 0) {
+                    return dateComparison;
+                }
+                // If the main dates are the same, sort by the creation timestamp (newest first).
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+            setTransactions(sorted);
+
         } catch (err) {
             setError('Failed to fetch transactions.');
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]);
 
     useEffect(() => {
         fetchTransactions();
-    }, [token]);
+    }, [fetchTransactions]);
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this transaction?')) {
@@ -39,7 +63,7 @@ const Transactions = () => {
                     `${import.meta.env.VITE_API_URL}/transactions/${id}`,
                     { headers: { 'Authorization': `Bearer ${token}` } }
                 );
-                fetchTransactions(); // Refresh list after deleting
+                fetchTransactions();
             } catch (err) {
                 alert('Failed to delete transaction.');
             }
@@ -52,7 +76,8 @@ const Transactions = () => {
     };
 
     const handleAdd = () => {
-        setTransactionToEdit(null); // Ensure we are in "add" mode
+        setTransactionToEdit(null);
+        setInitialType('expense');
         setIsModalOpen(true);
     };
 
@@ -79,6 +104,7 @@ const Transactions = () => {
                     transactionToEdit={transactionToEdit}
                     onClose={handleCloseModal}
                     onSuccess={fetchTransactions}
+                    initialType={initialType}
                 />
             )}
 

@@ -2,24 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * A form component for creating or editing a transaction.
- * @param {object} props
- * @param {object|null} props.transactionToEdit - The transaction object to edit, or null for a new transaction.
- * @param {function} props.onClose - Function to close the modal.
- * @param {function} props.onSuccess - Function to call after a successful submission to refresh the transaction list.
- */
-const TransactionForm = ({ transactionToEdit, onClose, onSuccess }) => {
+const TransactionForm = ({ transactionToEdit, onClose, onSuccess, initialType = 'expense' }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
-    const [type, setType] = useState('expense');
+    const [type, setType] = useState(initialType);
     const [category, setCategory] = useState('');
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // YYYY-MM-DD format
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { token } = useAuth();
 
-    // If we are editing, populate the form fields when the component mounts
     useEffect(() => {
         if (transactionToEdit) {
             setDescription(transactionToEdit.description);
@@ -27,8 +19,10 @@ const TransactionForm = ({ transactionToEdit, onClose, onSuccess }) => {
             setType(transactionToEdit.type);
             setCategory(transactionToEdit.category);
             setDate(new Date(transactionToEdit.date).toISOString().split('T')[0]);
+        } else {
+            setType(initialType);
         }
-    }, [transactionToEdit]);
+    }, [transactionToEdit, initialType]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,22 +33,20 @@ const TransactionForm = ({ transactionToEdit, onClose, onSuccess }) => {
         
         try {
             if (transactionToEdit) {
-                // Update existing transaction
                 await axios.patch(
                     `${import.meta.env.VITE_API_URL}/transactions/${transactionToEdit._id}`,
                     transactionData,
                     { headers: { 'Authorization': `Bearer ${token}` } }
                 );
             } else {
-                // Create new transaction
                 await axios.post(
                     `${import.meta.env.VITE_API_URL}/transactions`,
                     transactionData,
                     { headers: { 'Authorization': `Bearer ${token}` } }
                 );
             }
-            onSuccess(); // Refresh the list
-            onClose();   // Close the modal
+            onSuccess();
+            onClose();
         } catch (err) {
             setError(err.response?.data?.message || "An error occurred.");
         } finally {
@@ -63,8 +55,19 @@ const TransactionForm = ({ transactionToEdit, onClose, onSuccess }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        // --- THIS IS THE FIX ---
+        // The root div now creates the "glassmorphism" effect.
+        // - `bg-gray-900/30`: A semi-transparent dark background.
+        // - `backdrop-blur-sm`: Blurs the content behind the overlay.
+        <div 
+            className="fixed inset-0 bg-gray-900/30 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+            onClick={onClose} // Optional: Close modal when clicking the backdrop
+        >
+            {/* The form card itself. We stop propagation to prevent closing when clicking inside the form. */}
+            <div 
+                className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">
                     {transactionToEdit ? 'Edit Transaction' : 'Add New Transaction'}
                 </h2>
