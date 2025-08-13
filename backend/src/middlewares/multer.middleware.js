@@ -1,33 +1,24 @@
+// src/middlewares/multer.middleware.js
 import multer from "multer";
+import fs from "fs";
+import path from "path";
 
-// Configure Multer storage to save files to a temporary directory on the disk.
+const tempDir = path.join(process.cwd(), "public", "temp");
+
+// Ensure temp directory exists
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+    console.log(`✅ Created temp folder: ${tempDir}`);
+}
+
 const storage = multer.diskStorage({
-    /**
-     * @description Sets the destination folder for uploaded files.
-     * @param {object} req - The Express request object.
-     * @param {object} file - The file object being uploaded.
-     * @param {function} cb - The callback function to complete the destination setup.
-     */
     destination: function (req, file, cb) {
-        // All temporary files will be stored in the './public/temp' directory.
-        // Make sure this directory exists.
-        cb(null, "./public/temp");
+        cb(null, tempDir);
     },
-    /**
-     * @description Determines the filename for the uploaded file.
-     * @param {object} req - The Express request object.
-     * @param {object} file - The file object being uploaded.
-     * @param {function} cb - The callback function to complete the filename setup.
-     */
     filename: function (req, file, cb) {
-        // For simplicity, we'll keep the original filename.
-        // In a production environment, you might want to add a unique prefix
-        // to avoid filename conflicts (e.g., using Date.now() or a random string).
-        cb(null, file.originalname);
+        const uniqueName = `${Date.now()}-${file.originalname}`;
+        cb(null, uniqueName);
     }
 });
 
-// Create the Multer upload instance with the configured storage.
-export const upload = multer({ 
-    storage, 
-});
+export const upload = multer({ storage });
