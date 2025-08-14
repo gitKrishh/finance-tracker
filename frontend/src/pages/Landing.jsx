@@ -24,7 +24,15 @@ const Landing = () => {
             {/* --- Header --- */}
             <header className="absolute top-0 left-0 w-full z-10">
                 <nav className="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <div className="text-2xl font-bold text-gray-800">SpendTrack</div>
+                    {/* --- NEW LOGO ADDED HERE --- */}
+                    <div className="flex items-center space-x-2">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="32" height="32" rx="8" fill="#3B82F6"/>
+                            <path d="M12 22C12 24.2091 13.7909 26 16 26C18.2091 26 20 24.2091 20 22C20 19.7909 18.2091 18 16 18H12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M20 10C20 7.79086 18.2091 6 16 6C13.7909 6 12 7.79086 12 10C12 12.2091 13.7909 14 16 14H20" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="text-2xl font-bold text-gray-800">SpendTrack</span>
+                    </div>
                     <div className="flex items-center space-x-4">
                         <Link to="/login" className="text-gray-600 hover:text-blue-500 font-semibold">Login</Link>
                         <Link to="/register" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
